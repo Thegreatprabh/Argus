@@ -81,6 +81,21 @@ def t_rebuild_scaffold(target: str) -> Dict[str, Any]:
         target, outdir="rebuild-out", project="my-rebuild").to_dict()
 
 
+@tool("auto.rebuild", "ONE-SHOT: give a website URL or APK path, get the full reverse-engineer + rebuild pipeline in a single call. Returns blueprint summary + generated scaffold file list.")
+def t_auto_rebuild(target: str) -> Dict[str, Any]:
+    eng = RebuildEngine()
+    bp = (eng.blueprint_apk(target) if target.lower().endswith(".apk")
+          else eng.blueprint_web(target))
+    files = eng.generate(bp, "rebuild-out", "my-rebuild")
+    return {"target": target,
+            "blueprint_kind": bp.get("kind"),
+            "tech": bp.get("tech", []),
+            "pages": len(bp.get("pages", [])),
+            "endpoints": len(bp.get("endpoints", [])) or len(bp.get("urls", [])),
+            "files_generated": files,
+            "outdir": "rebuild-out"}
+
+
 def _handle(msg: Dict[str, Any]) -> Dict[str, Any] | None:
     method = msg.get("method", "")
     mid = msg.get("id")

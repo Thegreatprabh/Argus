@@ -86,6 +86,25 @@ def cmd_dashboard(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_auto(args: argparse.Namespace) -> int:
+    """One shot: URL/APK in -> full rebuild out. The 'give URL, get rebuild' flow."""
+    eng = RebuildEngine()
+    print(f"[●] X-raying {args.target} ...", file=sys.stderr)
+    bp = (eng.blueprint_apk(args.target)
+          if args.target.lower().endswith(".apk")
+          else eng.blueprint_web(args.target))
+    n_ep = len(bp.get("endpoints", [])) or len(bp.get("urls", []))
+    print(f"[✓] blueprint ready: {len(bp.get('pages', []))} pages, "
+          f"{n_ep} endpoints/URLs, tech={', '.join(bp.get('tech', [])) or 'n/a'}",
+          file=sys.stderr)
+    print(f"[●] generating rebuild scaffold ...", file=sys.stderr)
+    files = eng.generate(bp, args.outdir, args.project)
+    print(f"[✓] DONE — {len(files)} files in {args.outdir}/", file=sys.stderr)
+    print(f"    next: cd {args.outdir} && start building. "
+          f"See REBUILD_NOTES.md", file=sys.stderr)
+    return 0
+
+
 def cmd_tools(_: argparse.Namespace) -> int:
     for name, t in _REGISTRY.items():
         print(f"{name:18s} {t['description']}")
@@ -141,6 +160,12 @@ def build_parser() -> argparse.ArgumentParser:
     db.add_argument("--port", type=int, default=8765)
     db.add_argument("--no-browser", action="store_true")
     db.set_defaults(fn=cmd_dashboard)
+
+    au = sub.add_parser("auto", help="one shot: URL/APK -> full rebuild")
+    au.add_argument("target", help="website URL or APK path")
+    au.add_argument("-o", "--outdir", default="rebuild-out")
+    au.add_argument("--project", default="my-rebuild")
+    au.set_defaults(fn=cmd_auto)
 
     t = sub.add_parser("tools", help="list MCP tools")
     t.set_defaults(fn=cmd_tools)

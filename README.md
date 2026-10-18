@@ -14,8 +14,8 @@
 
 ```console
 $ pip install git+https://github.com/Thegreatprabh/argus
-$ argus scan-web https://example.com --deep
-$ argus rebuild https://example.com -o ./my-version --project myapp
+$ argus auto https://example.com -o ./my-version --project myapp
+#    ☝️ ONE SHOT: url in → full x-ray + rebuild scaffold out
 $ argus dashboard        # 👁️ visual investigation board
 $ argus setup            # connect Claude Code, Codex, Cursor, Gemini in one shot
 ```
@@ -73,10 +73,10 @@ argus --version
 | APK analysis | ✅ | ✅ |
 | Binary analysis | Ghidra/Hopper/IDA | ✅ **radare2** (free, Termux-ready) |
 | Firmware (Binwalk) | ✅ | ✅ |
-| **Dynamic analysis (Frida)** | ❌ | ✅ — see what code *does* at runtime |
-| **Rebuild scaffold** | ❌ | ✅ — blueprint → starter codebase |
-| **Web dashboard UI** | ❌ CLI only | ✅ visual investigation board |
-| **Termux / phone** | ❌ desktop-only | ✅ runs in your pocket |
+| **Dynamic analysis (Frida)** | — | ✅ — see what code *does* at runtime |
+| **Rebuild scaffold** | — | ✅ — blueprint → starter codebase |
+| **Web dashboard UI** | — CLI only | ✅ visual investigation board |
+| **Termux / phone** | — desktop-only | ✅ runs in your pocket |
 | License | MIT | MIT |
 
 ## 🧰 Engines
