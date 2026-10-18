@@ -92,6 +92,11 @@ def cmd_secrets(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_doctor(_: argparse.Namespace) -> int:
+    from .doctor import run
+    return run()
+
+
 def cmd_auto(args: argparse.Namespace) -> int:
     """One shot: URL/APK in -> full rebuild out. The 'give URL, get rebuild' flow."""
     eng = RebuildEngine()
@@ -176,6 +181,9 @@ def build_parser() -> argparse.ArgumentParser:
     sec = sub.add_parser("secrets", help="hunt exposed API keys/tokens")
     sec.add_argument("target", help="website URL, APK or binary path")
     sec.set_defaults(fn=cmd_secrets)
+
+    doc = sub.add_parser("doctor", help="diagnose MCP connection problems")
+    doc.set_defaults(fn=cmd_doctor)
 
     t = sub.add_parser("tools", help="list MCP tools")
     t.set_defaults(fn=cmd_tools)
