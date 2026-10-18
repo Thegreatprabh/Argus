@@ -104,6 +104,8 @@ Or manually: [`./.mcp.json`](.mcp.json)
 📖 **Full per-agent guide (Codex Desktop, ChatGPT Desktop, Claude, Cursor,
 Gemini, Antigravity, Termux): [`docs/SETUP_ALL_AGENTS.md`](docs/SETUP_ALL_AGENTS.md)**
 
+💬 **No setup? Use the web chatbot:** [ARGUS Chatbot](https://argus-chatbot-prabhjotshergill386-5432s-projects.vercel.app) — bring your own API key (OpenAI / Anthropic / Gemini, stays in your browser), chat with pre-loaded ARGUS instructions, reverse-engineer right away.
+
 Then just ask your agent: *"Use ARGUS to map how this app's login works —
 and scaffold my own version."* See [`examples/agent-rebuild-session.md`](examples/agent-rebuild-session.md).
 
