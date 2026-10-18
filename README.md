@@ -8,7 +8,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![MCP](https://img.shields.io/badge/MCP-stdio-b366ff.svg)](argus/mcp_server.py)
 [![Termux](https://img.shields.io/badge/runs_on-Termux-ff8c00.svg)](docs/TERMUX.md)
-[![Engines](https://img.shields.io/badge/engines-6-00e5ff.svg)](#-engines)
+[![Engines](https://img.shields.io/badge/engines-7-00e5ff.svg)](#-engines)
 
 </div>
 
@@ -57,7 +57,7 @@ pip install -e .
 
 **Verify**
 ```bash
-argus tools     # list all 6 MCP tools
+argus tools     # list all 8 MCP tools
 argus --version
 ```
 
@@ -84,11 +84,13 @@ argus --version
 | Engine | Target | Backend | Command |
 |---|---|---|---|
 | 🌐 `web.analyze` | Websites | pure Python | `argus scan-web URL --deep` |
-| 📦 `apk.overview` | Android APKs | zip-parse / apktool | `argus apk app.apk` |
+| 📦 `apk.overview` | Android APKs (+risk score) | zip-parse / apktool | `argus apk app.apk` |
 | ⚙️ `binary.info` | Executables | radare2 | `argus binary prog.exe` |
 | 🔍 `firmware.scan` | Firmware blobs | Binwalk | `argus firmware fw.bin` |
 | 🔬 `frida.ps` | Running apps | Frida | `argus ps` |
 | 🏗️ `rebuild.scaffold` | URL / APK → code | ARGUS core | `argus rebuild TARGET -o ./out` |
+| ⚡ `auto.rebuild` | URL → full pipeline | ARGUS core | `argus auto URL -o ./out` |
+| 🔑 `secrets.scan` | leaked keys/tokens | 8 credential patterns | `argus secrets TARGET` |
 
 ## 🤖 Connect your AI agent
 

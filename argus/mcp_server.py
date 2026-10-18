@@ -24,6 +24,7 @@ from .engines.dynamic import DynamicEngine
 from .engines.firmware import FirmwareEngine
 from .engines.mobile import MobileEngine
 from .engines.rebuild import RebuildEngine
+from .engines.secrets import SecretsEngine
 from .engines.web import WebEngine
 
 ToolFn = Callable[..., Dict[str, Any]]
@@ -94,6 +95,11 @@ def t_auto_rebuild(target: str) -> Dict[str, Any]:
             "endpoints": len(bp.get("endpoints", [])) or len(bp.get("urls", [])),
             "files_generated": files,
             "outdir": "rebuild-out"}
+
+
+@tool("secrets.scan", "Hunt exposed credentials: API keys, AWS keys, GitHub/Slack tokens, JWTs, private keys in JS bundles, APKs or binaries. Evidence is masked.")
+def t_secrets_scan(target: str) -> Dict[str, Any]:
+    return SecretsEngine().analyze(target).to_dict()
 
 
 def _handle(msg: Dict[str, Any]) -> Dict[str, Any] | None:

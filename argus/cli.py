@@ -12,6 +12,7 @@ from .engines.dynamic import DynamicEngine
 from .engines.firmware import FirmwareEngine
 from .engines.mobile import MobileEngine
 from .engines.rebuild import RebuildEngine
+from .engines.secrets import SecretsEngine
 from .engines.web import WebEngine
 from .mcp_server import _REGISTRY
 
@@ -83,6 +84,11 @@ def cmd_setup(args: argparse.Namespace) -> int:
 def cmd_dashboard(args: argparse.Namespace) -> int:
     from .dashboard import run
     run(port=args.port, open_browser=not args.no_browser)
+    return 0
+
+
+def cmd_secrets(args: argparse.Namespace) -> int:
+    _emit(SecretsEngine().analyze(args.target).to_dict())
     return 0
 
 
@@ -166,6 +172,10 @@ def build_parser() -> argparse.ArgumentParser:
     au.add_argument("-o", "--outdir", default="rebuild-out")
     au.add_argument("--project", default="my-rebuild")
     au.set_defaults(fn=cmd_auto)
+
+    sec = sub.add_parser("secrets", help="hunt exposed API keys/tokens")
+    sec.add_argument("target", help="website URL, APK or binary path")
+    sec.set_defaults(fn=cmd_secrets)
 
     t = sub.add_parser("tools", help="list MCP tools")
     t.set_defaults(fn=cmd_tools)

@@ -76,6 +76,26 @@ class MobileEngine(Engine):
                 if any(m in haystack for m in ms)]
         urls = sorted(set(URL_RE.findall(haystack)))[:100]
 
+        # --- risk score: 0-100, higher = more invasive ---------------------
+        score = min(60, len(dangerous) * 15) + min(20, len(sdks) * 5)
+        sketchy_urls = [u for u in urls
+                        if u.startswith("http://") or re.match(r"https?://\d+\.\d+", u)]
+        score = min(100, score + min(20, len(sketchy_urls) * 10))
+        label = "Low" if score <= 30 else "Medium" if score <= 60 else "High"
+        result.findings.append(Finding(
+            f"Risk score: {score}/100 ({label})",
+            f"{len(dangerous)} dangerous permissions, {len(sdks)} tracker "
+            f"SDKs, {len(sketchy_urls)} sketchy URLs.",
+            severity="high" if score > 60 else "medium" if score > 30 else "info",
+            meta={"risk_score": score, "risk_label": label},
+        ))
+        result.raw["risk_score"] = score
+        result.raw["risk_label"] = label
+        result.raw["permissions"] = perms
+        result.raw["dangerous"] = dangerous
+        result.raw["sdks"] = sdks
+        result.raw["urls"] = urls
+
         if perms:
             result.findings.append(Finding(
                 f"Permissions ({len(perms)})",

@@ -53,3 +53,38 @@ def test_firmware_parse():
     sigs = eng._parse(sample)
     assert ("0", "JFFS2 filesystem") in sigs
     assert len(sigs) == 2
+
+
+def test_secrets_detects_github_token():
+    from argus.engines.secrets import SecretsEngine
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write('const t = "ghp_123456789012345678901234567890123456";')
+        path = f.name
+    res = SecretsEngine().analyze(path).to_dict()
+    assert any("GitHub token" in x["title"] for x in res["findings"])
+    # evidence must be masked, not the raw token
+    assert "ghp_123456789012345678901234567890123456" not in res["findings"][0]["evidence"]
+
+
+def test_secrets_clean():
+    from argus.engines.secrets import SecretsEngine
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write('console.log("hello world");')
+        path = f.name
+    res = SecretsEngine().analyze(path).to_dict()
+    assert res["findings"][0]["title"] == "No exposed secrets found"
+
+
+def test_apk_risk_score():
+    import zipfile
+    from argus.engines.mobile import MobileEngine
+    p = "/tmp/risktest.apk"
+    with zipfile.ZipFile(p, "w") as z:
+        z.writestr("classes.dex",
+                   "android.permission.READ_SMS android.permission.CAMERA "
+                   "com/appsflyer/ http://1.2.3.4/x")
+    res = MobileEngine().analyze(p).to_dict()
+    assert res["raw"]["risk_score"] >= 40
+    assert res["raw"]["risk_label"] in ("Medium", "High")
