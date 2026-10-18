@@ -101,6 +101,9 @@ argus setup             # Claude Code + Cursor + Codex + Gemini, one shot
 
 Or manually: [`./.mcp.json`](.mcp.json)
 
+📖 **Full per-agent guide (Codex Desktop, ChatGPT Desktop, Claude, Cursor,
+Gemini, Antigravity, Termux): [`docs/SETUP_ALL_AGENTS.md`](docs/SETUP_ALL_AGENTS.md)**
+
 Then just ask your agent: *"Use ARGUS to map how this app's login works —
 and scaffold my own version."* See [`examples/agent-rebuild-session.md`](examples/agent-rebuild-session.md).
 
