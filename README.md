@@ -12,6 +12,8 @@
 
 </div>
 
+> 💬 **No coding needed — try it in your browser:** [ARGUS Chatbot](https://argus-chatbot-prabhjotshergill386-5432s-projects.vercel.app) — connect your own API key (OpenAI / Anthropic / Gemini, stays private in your browser) and start reverse-engineering instantly. No install, no terminal.
+
 ```console
 $ pip install git+https://github.com/Thegreatprabh/argus
 $ argus auto https://example.com -o ./my-version --project myapp
