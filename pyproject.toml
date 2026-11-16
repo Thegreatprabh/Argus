@@ -1,6 +1,6 @@
 [project]
 name = "argus"
-version = "0.1.0"
+version = "0.2.1"
 description = "ARGUS — an AI-agent reverse engineering platform. Point an agent at any software; get evidence-backed answers about how it works."
 readme = "README.md"
 requires-python = ">=3.9"
